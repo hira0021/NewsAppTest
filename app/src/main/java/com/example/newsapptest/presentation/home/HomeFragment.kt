@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.newsapptest.databinding.FragmentHomeBinding
-import com.example.newsapptest.domain.entity.Article
 import com.example.newsapptest.utils.BaseResponse
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,7 +33,8 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupRecyclerView(emptyList(), true)
+        adapter = HomeAdapter()
+        setupRecyclerView()
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             refreshNews()
@@ -45,11 +45,12 @@ class HomeFragment : Fragment() {
             when (response) {
                 is BaseResponse.Loading -> {
                     Log.d("HomeFragment", "Loading...")
-                    setupRecyclerView(emptyList(), true)
+                    adapter.setLoading(true)
                 }
                 is BaseResponse.Success -> {
                     binding.swipeRefreshLayout.isRefreshing = false
-                    setupRecyclerView(response.data.articles, false)
+                    adapter.setLoading(false)
+                    adapter.setData(response.data.articles)
                 }
                 is BaseResponse.Error -> {
                     binding.swipeRefreshLayout.isRefreshing = false
@@ -59,14 +60,12 @@ class HomeFragment : Fragment() {
         })
     }
 
-    private fun setupRecyclerView(articleData: List<Article>?, isLoading: Boolean) {
-        adapter = HomeAdapter(articleData, isLoading)
-
+    private fun setupRecyclerView() {
         val layoutManager = GridLayoutManager(requireContext(), 2)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return when {
-                    isLoading -> if (position % 5 == 0) 2 else 1
+                    adapter.isLoading() -> if (position % 5 == 0) 2 else 1
                     position % 5 == 0 -> 2
                     else -> 1
                 }

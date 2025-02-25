@@ -14,14 +14,17 @@ import com.example.newsapptest.domain.entity.Article
 import com.example.newsapptest.utils.DateUtils.formatDate1
 import com.example.newsapptest.utils.DateUtils.formatDate2
 
-class HomeAdapter(private var items: List<Article>?, private val isLoading: Boolean) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         private const val TYPE_LARGE = 0
         private const val TYPE_SMALL = 1
         private const val TYPE_SHIMMER = 2
     }
+
+    private var items: List<Article>? = emptyList()
+    private var isLoading = false
+
 
     override fun getItemViewType(position: Int): Int {
         return when {
@@ -38,12 +41,16 @@ class HomeAdapter(private var items: List<Article>?, private val isLoading: Bool
                     .inflate(R.layout.item_shimmer, parent, false)
                 ShimmerViewHolder(view)
             }
+
             TYPE_LARGE -> {
-                val binding = ItemLargeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding =
+                    ItemLargeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 LargeViewHolder(binding)
             }
+
             else -> {
-                val binding = ItemSmallBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding =
+                    ItemSmallBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 SmallViewHolder(binding)
             }
         }
@@ -59,9 +66,25 @@ class HomeAdapter(private var items: List<Article>?, private val isLoading: Bool
 
     override fun getItemCount(): Int = if (isLoading) 9 else items?.size ?: 0
 
+    fun setData(newItems: List<Article>) {
+        isLoading = false
+        this.items = newItems
+        notifyDataSetChanged()
+    }
+
+    fun setLoading(loading: Boolean) {
+        isLoading = loading
+        notifyDataSetChanged()
+    }
+
+    fun isLoading(): Boolean {
+        return isLoading
+    }
+
     class ShimmerViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
-    class LargeViewHolder(private val binding: ItemLargeBinding) : RecyclerView.ViewHolder(binding.root) {
+    class LargeViewHolder(private val binding: ItemLargeBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Article) {
             binding.textViewTitle.text = item.title
             binding.textViewDescription.text = item.description
@@ -81,7 +104,8 @@ class HomeAdapter(private var items: List<Article>?, private val isLoading: Bool
         }
     }
 
-    class SmallViewHolder(private val binding: ItemSmallBinding) : RecyclerView.ViewHolder(binding.root) {
+    class SmallViewHolder(private val binding: ItemSmallBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Article) {
             binding.textViewTitle.text = item.title
             binding.textViewDescription.text = item.description

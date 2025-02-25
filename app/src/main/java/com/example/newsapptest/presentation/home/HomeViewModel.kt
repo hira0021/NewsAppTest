@@ -20,14 +20,16 @@ class HomeViewModel @Inject constructor(
     val newsInteractor: NewsUseCase
 ) : ViewModel() {
 
-    private var currentPage = 1
-    private var isLoading = false
-    private var isLastPage = false
+    private val _isLoading = MutableLiveData(false)
+    val isLoading: LiveData<Boolean> = _isLoading
 
     private val _newsList: MutableLiveData<BaseResponse<NewsResponse>> = MutableLiveData()
     val newsList: LiveData<BaseResponse<NewsResponse>> = _newsList
 
     fun getNews() = viewModelScope.launch {
+        if (_isLoading.value == true) return@launch
+
+        _isLoading.value = true
         _newsList.value = BaseResponse.Loading
 
         newsInteractor.getNews(
@@ -37,9 +39,11 @@ class HomeViewModel @Inject constructor(
         )
             .flowOn(Dispatchers.IO)
             .catch { e ->
+                _isLoading.value = false
                 Log.e("HomeViewModel", e.toString())
             }
             .collect {
+                _isLoading.value = false
                 _newsList.value = it
             }
     }
