@@ -1,5 +1,7 @@
 package com.example.newsapptest.presentation.recent
 
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -39,6 +41,11 @@ class RecentArticleAdapter(
             Glide.with(binding.imageView)
                 .load(article.urlToImage)
                 .into(binding.imageView)
+
+            binding.root.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(article.url))
+                it.context.startActivity(intent)
+            }
 
             binding.btnDelete.setOnClickListener {
                 onDeleteClick(article)
