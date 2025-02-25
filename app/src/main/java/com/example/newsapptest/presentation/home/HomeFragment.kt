@@ -1,5 +1,6 @@
 package com.example.newsapptest.presentation.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,8 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.newsapptest.databinding.FragmentHomeBinding
 import com.example.newsapptest.domain.entity.Article
+import com.example.newsapptest.presentation.newsdetail.NewsDetailActivity
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -77,11 +80,11 @@ class HomeFragment : Fragment() {
 
         homePagingAdapter.addLoadStateListener { loadStates ->
             if (loadStates.refresh is LoadState.Loading) {
-                binding.shimmerLayout.startShimmer() // Show shimmer
+                binding.shimmerLayout.startShimmer()
                 binding.shimmerLayout.visibility = View.VISIBLE
                 binding.recyclerView.visibility = View.GONE
             } else {
-                binding.shimmerLayout.stopShimmer() // Hide shimmer
+                binding.shimmerLayout.stopShimmer()
                 binding.shimmerLayout.visibility = View.GONE
                 binding.recyclerView.visibility = View.VISIBLE
             }
@@ -90,10 +93,13 @@ class HomeFragment : Fragment() {
     }
 
     private fun listNewsClicked(article: Article) {
-//        selectedMovieDiscoverResult = movieDiscoverResult
-//        val intent = Intent(activity, MovieDetailActivity::class.java)
-//        intent.putExtra("movieId", selectedMovieDiscoverResult.id)
-//        startActivity(intent)
+        val gson = Gson()
+        val articleJson = gson.toJson(article)
+
+        val intent = Intent(requireContext(), NewsDetailActivity::class.java).apply {
+            putExtra("ARTICLE_DATA", articleJson)
+        }
+        startActivity(intent)
     }
 
     override fun onDestroyView() {
