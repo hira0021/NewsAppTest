@@ -24,6 +24,8 @@ class HomeViewModel @Inject constructor(
     val newsList: LiveData<BaseResponse<NewsResponse>> = _newsList
 
     fun getNews() = viewModelScope.launch {
+        _newsList.value = BaseResponse.Loading
+
         newsInteractor.getNews()
             .flowOn(Dispatchers.IO)
             .catch { e ->

@@ -35,16 +35,24 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView(emptyList(), true)
-        homeViewModel.getNews()
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            refreshNews()
+        }
+
+        refreshNews()
         homeViewModel.newsList.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
                 is BaseResponse.Loading -> {
                     Log.d("HomeFragment", "Loading...")
+                    setupRecyclerView(emptyList(), true)
                 }
                 is BaseResponse.Success -> {
+                    binding.swipeRefreshLayout.isRefreshing = false
                     setupRecyclerView(response.data.articles, false)
                 }
                 is BaseResponse.Error -> {
+                    binding.swipeRefreshLayout.isRefreshing = false
                     Log.e("HomeFragment", "Error: ${response.message}")
                 }
             }
@@ -67,6 +75,10 @@ class HomeFragment : Fragment() {
 
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = adapter
+    }
+
+    private fun refreshNews() {
+        homeViewModel.getNews()
     }
 
     override fun onDestroyView() {
