@@ -1,7 +1,11 @@
 package com.example.newsapptest.presentation.newsdetail
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
@@ -17,30 +21,33 @@ class NewsDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        window.statusBarColor = getColor(R.color.main_color_dark)
+
         binding = ActivityNewsDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Retrieve data from intent
         val articleJson = intent.getStringExtra("ARTICLE_DATA")
-        val article: Article? = Gson().fromJson(articleJson, Article::class.java)
+        val article = Gson().fromJson(articleJson, Article::class.java)
 
-        article?.let {
-            displayArticleDetails(it)
-        }
-    }
-
-    private fun displayArticleDetails(article: Article) {
+        // Set Data to Views
         binding.textViewTitle.text = article.title
-        binding.textViewDescription.text = article.description
+        binding.textViewName.text = "Source : ${article.source.name}"
+        binding.textViewAuthor.text = "By: ${article.author ?: "Anonymous"}"
         binding.textViewPublishedAt.text = formatDate1(article.publishedAt)
+        binding.textViewDescription.text = article.description
 
-        val author = if (article.author.isNullOrEmpty()) "Anonymous" else article.author
-        binding.textViewAuthor.text = getString(R.string.author_by, author)
-
+        // Load Image
         Glide.with(this)
             .load(article.urlToImage)
-            .apply(RequestOptions().fitCenter().transform(RoundedCorners(16)))
+            .apply(RequestOptions().centerCrop().transform(RoundedCorners(16)))
             .into(binding.imageViewNews)
 
-        binding.btnBack.setOnClickListener { finish() }
+        // Open URL
+        binding.buttonOpenUrl.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(article.url))
+            startActivity(intent)
+        }
     }
 }

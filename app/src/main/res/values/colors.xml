@@ -7,6 +7,7 @@
     <color name="light_gray">#9C9C9C</color>
 
     <color name="main_color">#A9ED2A</color>
+    <color name="main_color_dark">#658917</color>
 
     <color name="black_content_bg">#232323</color>
     <color name="highlight">#CEFF9800</color>
