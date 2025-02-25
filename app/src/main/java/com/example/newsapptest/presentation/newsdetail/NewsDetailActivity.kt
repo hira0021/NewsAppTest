@@ -3,9 +3,8 @@ package com.example.newsapptest.presentation.newsdetail
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
@@ -27,27 +26,41 @@ class NewsDetailActivity : AppCompatActivity() {
         binding = ActivityNewsDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Retrieve data from intent
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "News Detail"
+
+        binding.toolbar.setNavigationOnClickListener {
+            finish()
+        }
+
         val articleJson = intent.getStringExtra("ARTICLE_DATA")
         val article = Gson().fromJson(articleJson, Article::class.java)
 
-        // Set Data to Views
         binding.textViewTitle.text = article.title
         binding.textViewName.text = "Source : ${article.source.name}"
         binding.textViewAuthor.text = "By: ${article.author ?: "Anonymous"}"
         binding.textViewPublishedAt.text = formatDate1(article.publishedAt)
         binding.textViewDescription.text = article.description
 
-        // Load Image
         Glide.with(this)
             .load(article.urlToImage)
             .apply(RequestOptions().centerCrop().transform(RoundedCorners(16)))
             .into(binding.imageViewNews)
 
-        // Open URL
         binding.buttonOpenUrl.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(article.url))
             startActivity(intent)
         }
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == android.R.id.home) {
+            finish()
+            true
+        } else {
+            super.onOptionsItemSelected(item)
+        }
+    }
+
 }
