@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapptest.databinding.FragmentHomeBinding
 import com.example.newsapptest.domain.entity.Article
@@ -45,8 +46,21 @@ class HomeFragment : Fragment() {
         }
 
         binding.swipeRefreshLayout.setOnRefreshListener {
+            // Immediately hide the circular loading indicator
+            binding.swipeRefreshLayout.isRefreshing = false
+
+            // Show shimmer effect
+            binding.shimmerLayout.startShimmer()
+            binding.shimmerLayout.visibility = View.VISIBLE
+
+            // Trigger data refresh (this should be your ViewModel call)
             homePagingAdapter.refresh()
         }
+
+
+//        binding.swipeRefreshLayout.setOnRefreshListener {
+//            homePagingAdapter.refresh()
+//        }
 
         homePagingAdapter.addLoadStateListener { loadState ->
             binding.swipeRefreshLayout.isRefreshing = loadState.source.refresh is LoadState.Loading
@@ -56,21 +70,40 @@ class HomeFragment : Fragment() {
 
     private fun setupRecyclerView() {
         binding.recyclerView.setHasFixedSize(true)
-        homePagingAdapter =
-            HomePagingAdapter { selectedItem: Article -> listNewsClicked(selectedItem) }
-        binding.recyclerView.layoutManager = LinearLayoutManager(activity)
+        homePagingAdapter = HomePagingAdapter { selectedItem: Article -> listNewsClicked(selectedItem) }
+
+        val layoutManager = GridLayoutManager(requireContext(), 2)
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return if (position % 5 == 0) 2 else 1
+            }
+        }
+
+        binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = homePagingAdapter.withLoadStateHeaderAndFooter(
             header = HomePagingLoaderAdapter { homePagingAdapter.retry() },
             footer = HomePagingLoaderAdapter { homePagingAdapter.retry() }
         )
-        homePagingAdapter.addLoadStateListener { loadState ->
-            binding.recyclerView.isVisible = loadState.refresh is LoadState.NotLoading
+
+        homePagingAdapter.addLoadStateListener { loadStates ->
+            if (loadStates.refresh is LoadState.Loading) {
+                binding.shimmerLayout.startShimmer() // Show shimmer
+                binding.shimmerLayout.visibility = View.VISIBLE
+                binding.recyclerView.visibility = View.GONE
+            } else {
+                binding.shimmerLayout.stopShimmer() // Hide shimmer
+                binding.shimmerLayout.visibility = View.GONE
+                binding.recyclerView.visibility = View.VISIBLE
+            }
+        }
+
+
+
 //            binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
 //            binding.retryButton.isVisible = loadState.source.refresh is LoadState.Error
 //            binding.tvConnectionError.isVisible = loadState.source.refresh is LoadState.Error
 //            binding.tvNoResult.isVisible =
 //                loadState.refresh is LoadState.NotLoading && homeMovieAdapter.itemCount == 0
-        }
 //        binding.retryButton.setOnClickListener {
 //            homeMovieAdapter.retry()
 //        }
