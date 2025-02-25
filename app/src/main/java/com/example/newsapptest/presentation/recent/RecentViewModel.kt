@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.newsapptest.domain.entity.ArticleLocal
 import com.example.newsapptest.domain.usecase.NewsUseCase
@@ -20,18 +21,21 @@ class RecentViewModel @Inject constructor(
     val newsInteractor: NewsUseCase
 ): ViewModel() {
 
-    private val _savedArticles: MutableLiveData<BaseResponse<List<ArticleLocal>>> = MutableLiveData()
-    val savedArticles: LiveData<BaseResponse<List<ArticleLocal>>> = _savedArticles
+//    private val _savedArticles: MutableLiveData<BaseResponse<List<ArticleLocal>>> = MutableLiveData()
+//    val savedArticles: LiveData<BaseResponse<List<ArticleLocal>>> = _savedArticles
+//
+//    fun getFavoriteMovieListCache() = viewModelScope.launch {
+//        newsInteractor.getSavedArticles()
+//            .flowOn(Dispatchers.IO)
+//            .catch { e ->
+//                Log.e("HomeViewModel", e.toString())
+//            }
+//            .collect {
+//                _savedArticles.value = it
+//            }
+//    }
 
-    fun getFavoriteMovieListCache() = viewModelScope.launch {
-        newsInteractor.getSavedArticles()
-            .flowOn(Dispatchers.IO)
-            .catch { e ->
-                Log.e("HomeViewModel", e.toString())
-            }
-            .collect {
-                _savedArticles.value = it
-            }
-    }
+    val savedArticles: LiveData<List<ArticleLocal>> = newsInteractor.getSavedArticles()
+        .asLiveData()
 
 }

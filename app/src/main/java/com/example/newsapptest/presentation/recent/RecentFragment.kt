@@ -33,8 +33,6 @@ class RecentFragment : Fragment() {
 
         setupRecyclerView()
         observeViewModel()
-
-        recentViewModel.getFavoriteMovieListCache()
     }
 
     private fun setupRecyclerView() {
@@ -46,25 +44,13 @@ class RecentFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        recentViewModel.savedArticles.observe(viewLifecycleOwner) { response ->
-            when (response) {
-                is BaseResponse.Success -> {
-                    recentArticleAdapter.submitList(response.data)
-                }
-                is BaseResponse.Error -> {
-                    // Handle error
-                }
-                is BaseResponse.Loading -> {
-                    // Show loading indicator
-                }
-            }
+        recentViewModel.savedArticles.observe(viewLifecycleOwner) { articles ->
+            recentArticleAdapter.submitList(articles)
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }

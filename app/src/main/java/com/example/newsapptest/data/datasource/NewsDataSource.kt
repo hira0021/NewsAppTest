@@ -11,6 +11,7 @@ import com.example.newsapptest.utils.BaseResponse
 import com.example.newsapptest.utils.Const
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class NewsDataSource @Inject constructor(
@@ -44,14 +45,9 @@ class NewsDataSource @Inject constructor(
         articleDao.updateArticle(article)
     }
 
-    fun getSavedArticles(): Flow<BaseResponse<List<ArticleLocal>>> = flow {
-        emit(BaseResponse.Loading)
-        try {
-            val entities = articleDao.getAllSavedArticles()
-            val articles = entities.map { it.toLocal() }
-            emit(BaseResponse.Success(articles))
-        } catch (e: Exception) {
-            emit(BaseResponse.Error(e.toString()))
+    fun getSavedArticles(): Flow<List<ArticleLocal>> {
+        return articleDao.getAllSavedArticles().map { entities ->
+            entities.map { it.toLocal() }
         }
     }
 

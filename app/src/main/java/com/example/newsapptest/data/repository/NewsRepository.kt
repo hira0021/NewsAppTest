@@ -4,7 +4,6 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.newsapptest.data.datasource.NewsDataSource
-import com.example.newsapptest.data.mapper.toLocal
 import com.example.newsapptest.data.pagingdatasource.NewsPagingDataSource
 import com.example.newsapptest.domain.entity.Article
 import com.example.newsapptest.domain.entity.ArticleLocal
@@ -12,7 +11,6 @@ import com.example.newsapptest.domain.entity.NewsResponse
 import com.example.newsapptest.domain.repository.INewsRepository
 import com.example.newsapptest.utils.BaseResponse
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class NewsRepository @Inject constructor(
@@ -42,7 +40,7 @@ class NewsRepository @Inject constructor(
         }
     }
 
-    override suspend fun getSavedArticles(): Flow<BaseResponse<List<ArticleLocal>>> {
+    override fun getSavedArticles(): Flow<List<ArticleLocal>> {
         return newsDataSource.getSavedArticles()
     }
 

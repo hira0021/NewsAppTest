@@ -34,9 +34,9 @@ class RecentArticleAdapter : RecyclerView.Adapter<RecentArticleAdapter.ArticleVi
             binding.textViewTitle.text = article.title
             binding.textViewUrl.text = article.url
 
-            Glide.with(binding.imageViewArticle)
+            Glide.with(binding.imageView)
                 .load(article.urlToImage)
-                .into(binding.imageViewArticle)
+                .into(binding.imageView)
         }
     }
 

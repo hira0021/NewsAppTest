@@ -16,6 +16,12 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        val apiKey: String = project.findProperty("API_KEY") as String? ?: ""
+        val baseUrl: String = project.findProperty("BASE_URL") as String? ?: ""
+
+        buildConfigField("String", "API_KEY", "\"$apiKey\"")
+        buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -37,6 +43,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 

@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 interface ArticleDao {
 
     @Query("SELECT * FROM articles")
-    suspend fun getAllSavedArticles(): List<ArticleEntity>
+    fun getAllSavedArticles(): Flow<List<ArticleEntity>>
 
     @Query("SELECT * FROM articles WHERE title = :title AND urlToImage = :urlToImage LIMIT 1")
     suspend fun getArticleByTitleAndImage(title: String, urlToImage: String?): ArticleEntity?
