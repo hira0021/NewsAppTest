@@ -4,7 +4,6 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.newsapptest.data.datasource.NewsDataSource
-import com.example.newsapptest.data.mapper.toEntity
 import com.example.newsapptest.data.pagingdatasource.NewsPagingDataSource
 import com.example.newsapptest.domain.entity.Article
 import com.example.newsapptest.domain.entity.ArticleLocal
@@ -31,7 +30,15 @@ class NewsRepository @Inject constructor(
     }
 
     override suspend fun saveArticle(article: ArticleLocal) {
-        newsDataSource.saveArticle(article)
+        val existingArticle = newsDataSource.getArticleByTitleAndImage(article.title, article.urlToImage)
+
+        if (existingArticle != null) {
+            val updatedArticle = existingArticle.copy(savedAt = System.currentTimeMillis())
+            newsDataSource.updateArticle(updatedArticle)
+        } else {
+            newsDataSource.saveArticle(article)
+        }
     }
+
 
 }

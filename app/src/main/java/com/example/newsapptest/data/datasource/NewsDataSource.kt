@@ -1,6 +1,7 @@
 package com.example.newsapptest.data.datasource
 
 import com.example.newsapptest.data.local.dao.ArticleDao
+import com.example.newsapptest.data.local.entity.ArticleEntity
 import com.example.newsapptest.data.mapper.toEntity
 import com.example.newsapptest.data.remote.NewsServices
 import com.example.newsapptest.domain.entity.ArticleLocal
@@ -32,6 +33,14 @@ class NewsDataSource @Inject constructor(
 
     suspend fun saveArticle(article: ArticleLocal) {
         articleDao.insertArticle(article.toEntity())
+    }
+
+    suspend fun getArticleByTitleAndImage(title: String, urlToImage: String?): ArticleEntity? {
+        return articleDao.getArticleByTitleAndImage(title, urlToImage)
+    }
+
+    suspend fun updateArticle(article: ArticleEntity) {
+        articleDao.updateArticle(article)
     }
 
 }
