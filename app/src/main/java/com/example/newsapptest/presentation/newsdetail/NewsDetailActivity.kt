@@ -11,7 +11,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.newsapptest.R
-import com.example.newsapptest.data.mapper.toEntity
 import com.example.newsapptest.databinding.ActivityNewsDetailBinding
 import com.example.newsapptest.domain.entity.Article
 import com.example.newsapptest.domain.entity.ArticleLocal
