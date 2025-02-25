@@ -23,4 +23,7 @@ class NewsInteractor @Inject constructor(
         repository.saveArticle(article)
     }
 
+    override suspend fun getSavedArticles(): Flow<BaseResponse<List<ArticleLocal>>> {
+        return repository.getSavedArticles()
+    }
 }

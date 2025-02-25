@@ -15,4 +15,6 @@ interface NewsUseCase {
 
     suspend fun saveArticle(article: ArticleLocal)
 
+    suspend fun getSavedArticles(): Flow<BaseResponse<List<ArticleLocal>>>
+
 }

@@ -3,6 +3,7 @@ package com.example.newsapptest.data.datasource
 import com.example.newsapptest.data.local.dao.ArticleDao
 import com.example.newsapptest.data.local.entity.ArticleEntity
 import com.example.newsapptest.data.mapper.toEntity
+import com.example.newsapptest.data.mapper.toLocal
 import com.example.newsapptest.data.remote.NewsServices
 import com.example.newsapptest.domain.entity.ArticleLocal
 import com.example.newsapptest.domain.entity.NewsResponse
@@ -17,7 +18,7 @@ class NewsDataSource @Inject constructor(
     val articleDao: ArticleDao
 ) {
 
-    suspend fun getNewsFromDataSource(
+    fun getNewsFromDataSource(
         query: String,
         page: Int,
         pageSize: Int
@@ -41,6 +42,17 @@ class NewsDataSource @Inject constructor(
 
     suspend fun updateArticle(article: ArticleEntity) {
         articleDao.updateArticle(article)
+    }
+
+    fun getSavedArticles(): Flow<BaseResponse<List<ArticleLocal>>> = flow {
+        emit(BaseResponse.Loading)
+        try {
+            val entities = articleDao.getAllSavedArticles()
+            val articles = entities.map { it.toLocal() }
+            emit(BaseResponse.Success(articles))
+        } catch (e: Exception) {
+            emit(BaseResponse.Error(e.toString()))
+        }
     }
 
 }
