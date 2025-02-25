@@ -1,12 +1,7 @@
 package com.example.newsapptest.presentation.home
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import com.example.newsapptest.data.pagingdatasource.NewsPagingDataSource
 import com.example.newsapptest.domain.entity.Article
 import com.example.newsapptest.domain.usecase.NewsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapptest.databinding.FragmentHomeBinding
 import com.example.newsapptest.domain.entity.Article
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,21 +44,13 @@ class HomeFragment : Fragment() {
         }
 
         binding.swipeRefreshLayout.setOnRefreshListener {
-            // Immediately hide the circular loading indicator
             binding.swipeRefreshLayout.isRefreshing = false
 
-            // Show shimmer effect
             binding.shimmerLayout.startShimmer()
             binding.shimmerLayout.visibility = View.VISIBLE
 
-            // Trigger data refresh (this should be your ViewModel call)
             homePagingAdapter.refresh()
         }
-
-
-//        binding.swipeRefreshLayout.setOnRefreshListener {
-//            homePagingAdapter.refresh()
-//        }
 
         homePagingAdapter.addLoadStateListener { loadState ->
             binding.swipeRefreshLayout.isRefreshing = loadState.source.refresh is LoadState.Loading
@@ -97,16 +87,6 @@ class HomeFragment : Fragment() {
             }
         }
 
-
-
-//            binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
-//            binding.retryButton.isVisible = loadState.source.refresh is LoadState.Error
-//            binding.tvConnectionError.isVisible = loadState.source.refresh is LoadState.Error
-//            binding.tvNoResult.isVisible =
-//                loadState.refresh is LoadState.NotLoading && homeMovieAdapter.itemCount == 0
-//        binding.retryButton.setOnClickListener {
-//            homeMovieAdapter.retry()
-//        }
     }
 
     private fun listNewsClicked(article: Article) {
