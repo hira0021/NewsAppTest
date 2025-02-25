@@ -18,7 +18,8 @@ fun ArticleLocal.toEntity(): ArticleEntity {
         id = this.id,
         title = this.title,
         urlToImage = this.urlToImage,
-        url = this.url
+        url = this.url,
+        savedAt = this.savedAt
     )
 }
 
@@ -26,6 +27,7 @@ fun Article.toEntity(): ArticleEntity {
     return ArticleEntity(
         title = this.title,
         urlToImage = this.urlToImage,
-        url = this.url
+        url = this.url,
+        savedAt = System.currentTimeMillis(),
     )
 }
