@@ -10,7 +10,7 @@ class NewsInteractor @Inject constructor(
     val repository: INewsRepository
 ) : NewsUseCase {
 
-    override suspend fun getNews(): Flow<BaseResponse<NewsResponse>> =
-        repository.getNews()
+    override suspend fun getNews(query: String, page: Int, pageSize: Int): Flow<BaseResponse<NewsResponse>> =
+        repository.getNews(query, page, pageSize)
 
 }

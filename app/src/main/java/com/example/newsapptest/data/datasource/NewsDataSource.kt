@@ -12,13 +12,14 @@ class NewsDataSource @Inject constructor(
     val newsServices: NewsServices
 ) {
 
-    suspend fun getNewsFromDataSource(): Flow<BaseResponse<NewsResponse>> = flow {
+    suspend fun getNewsFromDataSource(
+        query: String,
+        page: Int,
+        pageSize: Int
+    ): Flow<BaseResponse<NewsResponse>> = flow {
         emit(BaseResponse.Loading)
         try {
-            val data = newsServices.getNews(
-                query = "Indonesia",
-                apiKey = Const.API_KEY
-            )
+            val data = newsServices.getNews(Const.API_KEY, query, page, pageSize)
             emit(BaseResponse.Success(data))
         } catch (e: Exception) {
             emit(BaseResponse.Error(e.message ?: "getFollowingItemFromDataSource Error"))

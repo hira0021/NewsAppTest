@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface NewsUseCase {
 
-    suspend fun getNews(): Flow<BaseResponse<NewsResponse>>
+    suspend fun getNews(query: String, page: Int, pageSize: Int): Flow<BaseResponse<NewsResponse>>
 
 }

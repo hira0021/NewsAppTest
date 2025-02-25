@@ -11,8 +11,8 @@ class NewsRepository @Inject constructor(
     val newsDataSource: NewsDataSource
 ) : INewsRepository {
 
-    override suspend fun getNews(): Flow<BaseResponse<NewsResponse>> {
-        return newsDataSource.getNewsFromDataSource()
+    override suspend fun getNews(query: String, page: Int, pageSize: Int): Flow<BaseResponse<NewsResponse>> {
+        return newsDataSource.getNewsFromDataSource(query, page, pageSize)
     }
 
 }

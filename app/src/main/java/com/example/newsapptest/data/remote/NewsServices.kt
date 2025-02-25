@@ -8,8 +8,10 @@ interface NewsServices {
 
     @GET("v2/everything/")
     suspend fun getNews(
+        @Query("apiKey") apiKey: String,
         @Query("q") query: String,
-        @Query("apiKey") apiKey: String
+        @Query("page") page: Int,
+        @Query("pageSize") pageSize: Int
     ): NewsResponse
 
 }
