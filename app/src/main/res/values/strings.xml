@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">NewsAppTest</string>
+
+    <string name="home">Home</string>
+    <string name="recent">Recent</string>
+
+    <string name="read_more">Read More</string>
+    <string name="author_by">By: %1$s</string>
+
+</resources>

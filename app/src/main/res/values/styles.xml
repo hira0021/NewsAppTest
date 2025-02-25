@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  Main Activity BottomNavigationView Style  -->
+    <style name="MyBottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemTextAppearanceActive">@style/MyBottomNavigationView.TextAppearanceActive</item>
+        <item name="itemTextAppearanceInactive">@style/MyBottomNavigationView.TextAppearanceInactive</item>
+        <item name="itemIconTint">@color/main_color</item>
+        <item name="itemTextColor">@color/main_color</item>
+        <item name="itemBackground">@drawable/no_ripple_background</item>
+    </style>
+    <style name="MyBottomNavigationView.TextAppearanceActive" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">10sp</item>
+    </style>
+    <style name="MyBottomNavigationView.TextAppearanceInactive" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">8sp</item>
+    </style>
+    <!--  Main Activity BottomNavigationView Style  -->
+</resources>
