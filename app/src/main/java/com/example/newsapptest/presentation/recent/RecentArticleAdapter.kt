@@ -13,7 +13,7 @@ class RecentArticleAdapter : RecyclerView.Adapter<RecentArticleAdapter.ArticleVi
 
     fun submitList(newList: List<ArticleLocal>) {
         articles.clear()
-        articles.addAll(newList)
+        articles.addAll(newList.sortedByDescending { it.savedAt })
         notifyDataSetChanged()
     }
 

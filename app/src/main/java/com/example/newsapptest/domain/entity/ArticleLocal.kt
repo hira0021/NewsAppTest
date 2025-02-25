@@ -5,5 +5,5 @@ data class ArticleLocal(
     val title: String,
     val urlToImage: String?,
     val url: String,
-    val savedAt: Long = System.currentTimeMillis()
+    val savedAt: Long
 )

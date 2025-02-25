@@ -8,7 +8,8 @@ fun ArticleEntity.toLocal(): ArticleLocal {
         id = this.id,
         title = this.title,
         urlToImage = this.urlToImage,
-        url = this.url
+        url = this.url,
+        savedAt = this.savedAt
     )
 }
 
