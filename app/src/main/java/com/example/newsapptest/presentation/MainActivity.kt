@@ -29,6 +29,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        window.statusBarColor = resources.getColor(R.color.main_color_dark, theme)
+
         supportFragmentManager.beginTransaction()
             .add(R.id.fragment_container, homeFragment, "HOME")
             .add(R.id.fragment_container, recentFragment, "RECENT")
