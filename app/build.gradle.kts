@@ -64,4 +64,5 @@ dependencies {
     implementation(libs.fragment.ktx)
     implementation(libs.shimmer)
     implementation(libs.glide)
+    implementation(libs.paging)
 }

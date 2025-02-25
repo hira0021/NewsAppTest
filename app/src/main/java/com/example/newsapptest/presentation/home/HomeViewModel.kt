@@ -1,18 +1,22 @@
 package com.example.newsapptest.presentation.home
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.newsapptest.domain.entity.NewsResponse
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.example.newsapptest.data.pagingdatasource.NewsPagingDataSource
+import com.example.newsapptest.domain.entity.Article
 import com.example.newsapptest.domain.usecase.NewsUseCase
-import com.example.newsapptest.utils.BaseResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,32 +24,18 @@ class HomeViewModel @Inject constructor(
     val newsInteractor: NewsUseCase
 ) : ViewModel() {
 
-    private val _isLoading = MutableLiveData(false)
-    val isLoading: LiveData<Boolean> = _isLoading
+    private val searchQuery = MutableStateFlow("")
 
-    private val _newsList: MutableLiveData<BaseResponse<NewsResponse>> = MutableLiveData()
-    val newsList: LiveData<BaseResponse<NewsResponse>> = _newsList
+    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
+    val pagingNewsList: Flow<PagingData<Article>> = searchQuery
+        .debounce(800)
+        .distinctUntilChanged()
+        .flatMapLatest { query ->
+            newsInteractor.getPagerNews(query)
+        }
 
-    fun getNews() = viewModelScope.launch {
-        if (_isLoading.value == true) return@launch
-
-        _isLoading.value = true
-        _newsList.value = BaseResponse.Loading
-
-        newsInteractor.getNews(
-            query = "Indonesia",
-            page = 1,
-            pageSize = 20
-        )
-            .flowOn(Dispatchers.IO)
-            .catch { e ->
-                _isLoading.value = false
-                Log.e("HomeViewModel", e.toString())
-            }
-            .collect {
-                _isLoading.value = false
-                _newsList.value = it
-            }
+    fun updateSearchQuery(query: String) {
+        searchQuery.value = query
     }
 
 }

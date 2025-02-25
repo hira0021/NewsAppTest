@@ -1,6 +1,7 @@
 package com.example.newsapptest.di
 
 import com.example.newsapptest.data.datasource.NewsDataSource
+import com.example.newsapptest.data.pagingdatasource.NewsPagingDataSource
 import com.example.newsapptest.data.remote.NewsServices
 import dagger.Module
 import dagger.Provides
@@ -16,6 +17,12 @@ object DataSourceModule {
     @Provides
     fun providesNewsDataSource(newsServices: NewsServices): NewsDataSource {
         return NewsDataSource(newsServices)
+    }
+
+    @Singleton
+    @Provides
+    fun providesNewsPagingDataSource(newsServices: NewsServices): NewsPagingDataSource {
+        return NewsPagingDataSource(newsServices)
     }
 
 }
