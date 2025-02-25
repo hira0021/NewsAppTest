@@ -65,4 +65,8 @@ dependencies {
     implementation(libs.shimmer)
     implementation(libs.glide)
     implementation(libs.paging)
+
+    implementation(libs.room.runtime)
+    ksp(libs.room.compiler)
+    implementation(libs.room.ktx)
 }

@@ -1,6 +1,7 @@
 package com.example.newsapptest.di
 
 import com.example.newsapptest.data.datasource.NewsDataSource
+import com.example.newsapptest.data.local.dao.ArticleDao
 import com.example.newsapptest.data.pagingdatasource.NewsPagingDataSource
 import com.example.newsapptest.data.remote.NewsServices
 import dagger.Module
@@ -15,8 +16,8 @@ object DataSourceModule {
 
     @Singleton
     @Provides
-    fun providesNewsDataSource(newsServices: NewsServices): NewsDataSource {
-        return NewsDataSource(newsServices)
+    fun providesNewsDataSource(newsServices: NewsServices, articleDao: ArticleDao): NewsDataSource {
+        return NewsDataSource(newsServices, articleDao)
     }
 
     @Singleton

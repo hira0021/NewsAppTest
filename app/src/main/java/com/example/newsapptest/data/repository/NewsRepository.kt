@@ -4,8 +4,10 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.newsapptest.data.datasource.NewsDataSource
+import com.example.newsapptest.data.mapper.toEntity
 import com.example.newsapptest.data.pagingdatasource.NewsPagingDataSource
 import com.example.newsapptest.domain.entity.Article
+import com.example.newsapptest.domain.entity.ArticleLocal
 import com.example.newsapptest.domain.entity.NewsResponse
 import com.example.newsapptest.domain.repository.INewsRepository
 import com.example.newsapptest.utils.BaseResponse
@@ -27,4 +29,9 @@ class NewsRepository @Inject constructor(
             pagingSourceFactory = { NewsPagingDataSource(newsDataSource.newsServices).apply { getSearchQuery(query) } }
         ).flow
     }
+
+    override suspend fun saveArticle(article: ArticleLocal) {
+        newsDataSource.saveArticle(article)
+    }
+
 }

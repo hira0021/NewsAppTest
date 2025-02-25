@@ -4,19 +4,26 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.newsapptest.R
 import com.example.newsapptest.databinding.ActivityNewsDetailBinding
 import com.example.newsapptest.domain.entity.Article
+import com.example.newsapptest.domain.entity.ArticleLocal
 import com.example.newsapptest.utils.DateUtils.formatDate1
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class NewsDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNewsDetailBinding
+    private val newsDetailViewModel: NewsDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +59,8 @@ class NewsDetailActivity : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(article.url))
             startActivity(intent)
         }
+
+        saveArticleToLocal(article)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -60,6 +69,19 @@ class NewsDetailActivity : AppCompatActivity() {
             true
         } else {
             super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun saveArticleToLocal(article: Article) {
+        val articleLocal = ArticleLocal(
+            id = 0,
+            title = article.title,
+            urlToImage = article.urlToImage,
+            url = article.url
+        )
+
+        lifecycleScope.launch {
+            newsDetailViewModel.saveArticle(articleLocal)
         }
     }
 

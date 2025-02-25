@@ -2,6 +2,7 @@ package com.example.newsapptest.domain.usecase
 
 import androidx.paging.PagingData
 import com.example.newsapptest.domain.entity.Article
+import com.example.newsapptest.domain.entity.ArticleLocal
 import com.example.newsapptest.domain.entity.NewsResponse
 import com.example.newsapptest.domain.repository.INewsRepository
 import com.example.newsapptest.utils.BaseResponse
@@ -17,5 +18,9 @@ class NewsInteractor @Inject constructor(
 
     override fun getPagerNews(query: String): Flow<PagingData<Article>> =
         repository.getPagingNews(query)
+
+    override suspend fun saveArticle(article: ArticleLocal) {
+        repository.saveArticle(article)
+    }
 
 }

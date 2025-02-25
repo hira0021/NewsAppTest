@@ -2,6 +2,7 @@ package com.example.newsapptest.domain.usecase
 
 import androidx.paging.PagingData
 import com.example.newsapptest.domain.entity.Article
+import com.example.newsapptest.domain.entity.ArticleLocal
 import com.example.newsapptest.domain.entity.NewsResponse
 import com.example.newsapptest.utils.BaseResponse
 import kotlinx.coroutines.flow.Flow
@@ -12,5 +13,6 @@ interface NewsUseCase {
 
     fun getPagerNews(query: String): Flow<PagingData<Article>>
 
+    suspend fun saveArticle(article: ArticleLocal)
 
 }
