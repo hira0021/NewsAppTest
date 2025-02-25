@@ -11,6 +11,7 @@
 
     <color name="black_content_bg">#232323</color>
     <color name="highlight">#CEFF9800</color>
+    <color name="delete_red">#FF5252</color>
 
     <color name="grey_400">#bdbdbd</color>
 </resources>

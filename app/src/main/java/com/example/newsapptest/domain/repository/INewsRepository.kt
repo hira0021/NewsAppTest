@@ -15,6 +15,8 @@ interface INewsRepository {
 
     suspend fun saveArticle(article: ArticleLocal)
 
+    suspend fun deleteArticle(article: ArticleLocal)
+
     fun getSavedArticles() : Flow<List<ArticleLocal>>
 
 }

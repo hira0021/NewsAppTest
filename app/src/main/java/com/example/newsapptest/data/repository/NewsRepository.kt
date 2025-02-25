@@ -40,6 +40,10 @@ class NewsRepository @Inject constructor(
         }
     }
 
+    override suspend fun deleteArticle(article: ArticleLocal) {
+        newsDataSource.deleteArticle(article)
+    }
+
     override fun getSavedArticles(): Flow<List<ArticleLocal>> {
         return newsDataSource.getSavedArticles()
     }

@@ -23,7 +23,12 @@ class NewsInteractor @Inject constructor(
         repository.saveArticle(article)
     }
 
+    override suspend fun deleteArticle(article: ArticleLocal) {
+        repository.deleteArticle(article)
+    }
+
     override fun getSavedArticles(): Flow<List<ArticleLocal>> {
         return repository.getSavedArticles()
     }
+
 }

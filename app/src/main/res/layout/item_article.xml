@@ -49,5 +49,16 @@
                 android:maxLines="2"
                 android:ellipsize="end" />
         </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnDelete"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="centerInside"
+            android:paddingLeft="8dp"
+            android:src="@drawable/trash_64"
+            app:tint="@color/delete_red" />
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

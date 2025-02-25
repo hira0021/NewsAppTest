@@ -7,7 +7,9 @@ import com.bumptech.glide.Glide
 import com.example.newsapptest.databinding.ItemArticleBinding
 import com.example.newsapptest.domain.entity.ArticleLocal
 
-class RecentArticleAdapter : RecyclerView.Adapter<RecentArticleAdapter.ArticleViewHolder>() {
+class RecentArticleAdapter(
+    private val onDeleteClick: (ArticleLocal) -> Unit
+) : RecyclerView.Adapter<RecentArticleAdapter.ArticleViewHolder>() {
 
     private val articles = mutableListOf<ArticleLocal>()
 
@@ -37,6 +39,11 @@ class RecentArticleAdapter : RecyclerView.Adapter<RecentArticleAdapter.ArticleVi
             Glide.with(binding.imageView)
                 .load(article.urlToImage)
                 .into(binding.imageView)
+
+            binding.btnDelete.setOnClickListener {
+                onDeleteClick(article)
+            }
+
         }
     }
 

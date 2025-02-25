@@ -35,7 +35,9 @@ class RecentFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        recentArticleAdapter = RecentArticleAdapter()
+        recentArticleAdapter = RecentArticleAdapter { article ->
+            recentViewModel.deleteArticle(article)
+        }
         binding.recyclerViewSavedArticles.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = recentArticleAdapter

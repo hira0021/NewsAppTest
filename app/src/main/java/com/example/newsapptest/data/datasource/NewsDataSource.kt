@@ -37,6 +37,10 @@ class NewsDataSource @Inject constructor(
         articleDao.insertArticle(article.toEntity())
     }
 
+    suspend fun deleteArticle(article: ArticleLocal) {
+        articleDao.deleteArticle(article.toEntity())
+    }
+
     suspend fun getArticleByTitleAndImage(title: String, urlToImage: String?): ArticleEntity? {
         return articleDao.getArticleByTitleAndImage(title, urlToImage)
     }
