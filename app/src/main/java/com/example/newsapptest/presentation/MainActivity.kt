@@ -40,10 +40,9 @@ class MainActivity : AppCompatActivity() {
                 .add(R.id.fragment_container, recentFragment, recentTag)
                 .hide(recentFragment)
                 .commit()
-
             activeFragment = homeFragment
         } else {
-            activeFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+            activeFragment = supportFragmentManager.fragments.find { !it.isHidden }
         }
 
         binding.navigation.setOnItemSelectedListener { item ->
@@ -52,10 +51,12 @@ class MainActivity : AppCompatActivity() {
                     switchFragment(homeFragment)
                     true
                 }
+
                 R.id.action_recent -> {
                     switchFragment(recentFragment)
                     true
                 }
+
                 else -> false
             }
         }
