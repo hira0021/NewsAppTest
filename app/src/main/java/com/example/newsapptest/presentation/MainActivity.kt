@@ -16,10 +16,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val homeFragment = HomeFragment()
-    private val recentFragment = RecentFragment()
+    private val homeTag = "HOME_FRAGMENT"
+    private val recentTag = "RECENT_FRAGMENT"
 
-    private var activeFragment: Fragment = homeFragment
+    private var activeFragment: Fragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,11 +31,20 @@ class MainActivity : AppCompatActivity() {
 
         window.statusBarColor = resources.getColor(R.color.main_color_dark, theme)
 
-        supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_container, homeFragment, "HOME")
-            .add(R.id.fragment_container, recentFragment, "RECENT")
-            .hide(recentFragment)
-            .commit()
+        val homeFragment = supportFragmentManager.findFragmentByTag(homeTag) ?: HomeFragment()
+        val recentFragment = supportFragmentManager.findFragmentByTag(recentTag) ?: RecentFragment()
+
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragment_container, homeFragment, homeTag)
+                .add(R.id.fragment_container, recentFragment, recentTag)
+                .hide(recentFragment)
+                .commit()
+
+            activeFragment = homeFragment
+        } else {
+            activeFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        }
 
         binding.navigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -53,11 +62,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun switchFragment(targetFragment: Fragment) {
+        if (activeFragment == targetFragment) return
+
         supportFragmentManager.beginTransaction()
-            .hide(activeFragment)
+            .hide(activeFragment!!)
             .show(targetFragment)
             .commit()
+
         activeFragment = targetFragment
     }
-
 }
